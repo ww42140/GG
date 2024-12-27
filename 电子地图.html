@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>加载高德地图</title>
+
+    <style>
+
+        html,
+
+        body,
+
+        #container {
+
+            width: 100%;
+
+            height: 100%;
+
+        }
+
+    </style>
+
+    <script type="text/javascript">
+
+        window._AMapSecurityConfig = {
+
+            securityJsCode: "e42399c284447083e21344100eb6f325",
+
+        };
+
+    </script>
+
+    <script src="https://webapi.amap.com/maps?v=2.0&key=16d4d7937b46de7fc39977c675a4f686"></script>
+
+</head>
+
+
+
+<body>
+
+    <div id="container"></div>
+
+    <script>
+
+        console.log(AMap);
+
+    </script>
+
+    <script>
+
+        // 定义常量存储图标路径和信息窗口样式
+
+        const ICON_PATHS = {
+
+            第一教学楼: '教学楼图标路径',
+
+            北图书馆: '图书馆图标路径',
+
+            第二教学楼: '实验室图标路径',
+
+            第一食堂: '食堂图标路径',
+
+            竹苑5栋: '食堂图标路径',
+
+            第二食堂: '宿舍图标路径',
+
+            致知楼: '宿舍图标路径',
+
+            立德楼: '宿舍图标路径',
+
+            智华楼: '宿舍图标路径',
+
+            经管楼: '特定图标路径',
+
+            土木楼: '特定图标路径',
+
+            至信楼: '特定图标路径',
+
+            文法楼: '特定图标路径',
+
+            生物楼: '特定图标路径',
+
+            第二图书馆: '图书馆图标路径',
+
+            至诚楼: '特定图标路径',
+
+            园林楼: '特定图标路径',
+
+            林工楼: '特定图标路径',
+
+            林学楼: '特定图标路径',
+
+            信息楼: '特定图标路径',
+
+            体育馆: '体育馆图标路径',
+
+            茶苑餐厅: '体育馆图标路径',
+
+            第四食堂: '体育馆图标路径',
+
+            菜鸟驿站: '特定图标路径',
+
+            松苑: '特定图标路径',
+
+            橡苑: '特定图标路径',
+
+            篮球场: '特定图标路径',
+
+            足球场: '特定图标路径',
+
+            工学楼: '特定图标路径'
+
+        };
+
+        const INFO_WINDOW_STYLE = {
+
+            offset: new AMap.Pixel(0, -30),
+
+            minWidth: 200
+
+        };
+
+
+
+        // 创建地图实例
+
+        const map = new AMap.Map('container', {
+
+            center: [102.760536, 25.059855],
+
+            mapStyle: "amap://styles/default",
+
+            zoom: 16.5,
+
+            viewMode: '2D',
+
+            pitch: 45,
+
+        });
+
+        
+        // 创建标记点函数
+
+        function createMarker(position, title, icon) {
+
+            const marker = new AMap.Marker({
+
+                position: position,
+
+                title: title,
+
+                icon: icon
+
+            });
+
+            // 创建一个自定义的文本标签
+
+            const label = new AMap.Text({
+
+                text: title,
+
+                position: marker.getPosition(),
+
+                offset: new AMap.Pixel(0, -20)
+
+            });
+
+            map.add(label);
+
+            return marker;
+
+        }
+
+
+
+        // 创建信息窗口函数
+
+        function createInfoWindow(content) {
+
+            return new AMap.InfoWindow({
+
+                content: content,
+
+               ...INFO_WINDOW_STYLE
+
+            });
+
+        }
+
+
+
+        // 创建图标函数
+
+        function createIcon(path, size) {
+
+            return new AMap.Icon({
+
+                size: size,
+
+                image: path,
+
+                 imageSize: size
+
+            });
+
+        }
+
+
+
+        // 创建地点标记和信息窗口
+
+        function createLocationMarkerAndInfoWindow(locationName, position, description) {
+
+            const icon = createIcon(ICON_PATHS[locationName], new AMap.Size(30, 30));
+
+            const marker = createMarker(position, locationName, icon);
+
+            const infoWindow = createInfoWindow(description);
+
+            marker.on('click', function () {
+
+                infoWindow.open(map, marker.getPosition());
+
+            });
+
+            map.add(marker);
+
+            return marker;
+
+        }
+
+
+
+        // 创建标记和信息窗口
+
+        createLocationMarkerAndInfoWindow('第一教学楼', [102.758799, 25.060301], '这是教学楼，是学生们汲取知识的重要场所。这里有宽敞明亮的教室和先进的教学设备。');
+
+        createLocationMarkerAndInfoWindow('北图书馆', [102.757977, 25.061454], '这是图书馆，知识的宝库。拥有丰富的藏书、舒适的阅读环境和先进的电子资源查询系统。');
+
+        createLocationMarkerAndInfoWindow('第二教学楼', [102.756879, 25.061547], '这是教学楼，是学生们汲取知识的重要场所。这里有宽敞明亮的教室和先进的教学设备。');
+
+        createLocationMarkerAndInfoWindow('第一食堂', [102.759064, 25.061776], '这是食堂，美味的汇聚地。提供各种口味的美食，满足师生的饮食需求。');
+
+        createLocationMarkerAndInfoWindow('第二食堂', [102.758103, 25.062613], '这是食堂，美味的汇聚地。提供各种口味的美食，满足师生的饮食需求。');
+
+        createLocationMarkerAndInfoWindow('竹苑5栋', [102.755962, 25.061865], '这是宿舍，学生们的温馨港湾。提供舒适的居住环境，让学生们在学习之余能得到充分的休息。');
+
+        createLocationMarkerAndInfoWindow('立德楼', [102.754989, 25.058016], '这是立德楼，经济与管理学科的重要教学和研究场所。');
+
+        createLocationMarkerAndInfoWindow('智华楼', [102.755191, 25.057342], '这是智华楼，经济与管理学科的重要教学和研究场所。');
+
+        createLocationMarkerAndInfoWindow('致知楼', [102.753838, 25.057888], '这是致知楼，经济与管理学科的重要教学和研究场所。');
+
+        createLocationMarkerAndInfoWindow('经管楼', [102.754151, 25.056888], '这是经管楼，经济与管理学科的重要教学和研究场所。');
+
+        createLocationMarkerAndInfoWindow('土木楼', [102.754714, 25.056781], '这是土木楼，土木工程专业的教学和实践基地。');
+
+        createLocationMarkerAndInfoWindow('至信楼', [102.755852, 25.057212], '至信楼为师生提供了良好的教学和办公环境。');
+
+        createLocationMarkerAndInfoWindow('文法楼', [102.755646, 25.056597], '文法楼是文学与法学等学科的教学场所。');
+
+        createLocationMarkerAndInfoWindow('生物楼', [102.757095, 25.056263], '生物楼致力于生物学科的教学与科研。');
+
+        createLocationMarkerAndInfoWindow('第二图书馆', [102.757471, 25.056981], '第二图书馆丰富了学校的文献资源。');
+
+        createLocationMarkerAndInfoWindow('至诚楼', [102.758808, 25.05716], '至诚楼承载着多样的教学和学术活动。');
+
+        createLocationMarkerAndInfoWindow('园林楼', [102.759904, 25.059178], '园林楼展现了园林艺术与设计的魅力。');
+
+        createLocationMarkerAndInfoWindow('林工楼', [102.757803, 25.05923], '林工楼为林业工程学科的发展提供支持。');
+
+        createLocationMarkerAndInfoWindow('林学楼', [102.756939, 25.062424], '林学楼是林学专业的重要教学和科研场所。');
+
+        createLocationMarkerAndInfoWindow('信息楼', [102.759788, 25.060382], '信息楼是信息技术相关学科的教学和研究中心。');
+
+        createLocationMarkerAndInfoWindow('体育馆', [102.7621, 25.06151], '体育馆为师生提供了体育锻炼和竞技的场所。');
+
+        createLocationMarkerAndInfoWindow('菜鸟驿站', [102.762959, 25.06031], '菜鸟驿站方便了师生的快递收发。');
+
+        createLocationMarkerAndInfoWindow('茶苑餐厅', [102.756554, 25.057892], '这是食堂，美味的汇聚地。提供各种口味的美食，满足师生的饮食需求。');
+
+        createLocationMarkerAndInfoWindow('第四食堂', [102.761788, 25.058597], '这是食堂，美味的汇聚地。提供各种口味的美食，满足师生的饮食需求。');
+
+        createLocationMarkerAndInfoWindow('松苑', [102.760712, 25.061466], '松苑是一个环境优美的住宿区域。');
+
+        createLocationMarkerAndInfoWindow('橡苑', [102.763257, 25.057519], '橡苑为学生提供舒适的居住环境。');
+
+        createLocationMarkerAndInfoWindow('篮球场', [102.760575, 25.062488], '这是篮球场，学生们进行体育活动的热门场地。');
+
+        createLocationMarkerAndInfoWindow('足球场', [102.761959, 25.062873], '足球场是体育爱好者的天堂。');
+
+        createLocationMarkerAndInfoWindow('工学楼', [102.762817, 25.062513], '工学楼是工程学科的教学和研究场所。');
+
+
+
+        AMap.plugin(['AMap.ToolBar', 'AMap.Scale', 'AMap.Geolocation', 'AMap.ControlBar', 'AMap.HawkEye'], function () {
+
+            const toolbar = new AMap.ToolBar({
+
+                position: { left: '10px', top: '10px' }
+
+            });
+
+            const scale = new AMap.Scale({
+
+                position: { left: '10px', bottom: '50px' }
+
+            });
+
+            const hawkEye = new AMap.HawkEye({
+
+                position: { right: '10px', bottom: '10px' }
+
+            });
+
+            const geolocation = new AMap.Geolocation({
+
+                position: { left: '120px', bottom: '50px' }
+
+            });
+
+            const controlBar = new AMap.ControlBar({
+
+                position: { right: '150px', top: '10px' }
+
+            });
+
+            map.addControl(toolbar);
+
+            map.addControl(scale);
+
+            map.addControl(geolocation);
+
+            map.addControl(controlBar);
+
+            map.addControl(hawkEye);
+
+        });
+
+    </script>
+
+</body>
+
+
+
+</html>
